@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:logintest/View/time_line/post_page.dart';
 import 'package:logintest/model/account.dart';
 import 'package:logintest/model/post.dart';
 
@@ -87,6 +88,12 @@ class _TimeLinePageState extends State<TimeLinePage> {
             ),
           );
         },
+      ),
+      floatingActionButton: FloatingActionButton(  //PostPageに遷移する用のボタン
+        onPressed: () {
+          Navigator.push(context, MaterialPageRoute(builder: (context) => PostPage()));  //決まり文句
+        },
+        child: Icon(Icons.chat_bubble_outline),
       ),
     );
   }
