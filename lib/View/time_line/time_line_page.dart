@@ -89,12 +89,6 @@ class _TimeLinePageState extends State<TimeLinePage> {
           );
         },
       ),
-      floatingActionButton: FloatingActionButton(  //PostPageに遷移する用のボタン
-        onPressed: () {
-          Navigator.push(context, MaterialPageRoute(builder: (context) => PostPage()));  //決まり文句
-        },
-        child: Icon(Icons.chat_bubble_outline),
-      ),
     );
   }
 }
