@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:logintest/View/screen.dart';
+import 'package:logintest/View/start_up/login_page.dart';
 import 'package:logintest/View/time_line/time_line_page.dart';
 
 
@@ -17,7 +18,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: Screen(),
+      home: LoginPage(),
     );
   }
 }
