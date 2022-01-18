@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "683822791407",
+    "project_id": "logintest-3562f",
+    "storage_bucket": "logintest-3562f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:683822791407:android:a06ab407ebe5a162ddf91a",
+        "android_client_info": {
+          "package_name": "com.example.logintest"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "683822791407-k2pisdf4sfbb12kc21cj3dh9da7icp6h.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAM6JemH9w6DBqXBXndiw8gQ7X5E6NHww0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "683822791407-k2pisdf4sfbb12kc21cj3dh9da7icp6h.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
