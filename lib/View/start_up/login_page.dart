@@ -1,10 +1,9 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:logintest/View/screen.dart';
+import 'package:logintest/View/start_up/create_account_page.dart';
 
 class LoginPage extends StatefulWidget {
-  const LoginPage({Key? key}) : super(key: key);
-
   @override
   _LoginPageState createState() => _LoginPageState();
 }
@@ -12,6 +11,7 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -52,7 +52,7 @@ class _LoginPageState extends State<LoginPage> {
                     TextSpan(text: 'こちら',
                       style: TextStyle(color: Colors.blue),
                       recognizer: TapGestureRecognizer()..onTap = () {
-                        print('アカウントを作成');
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => CreateAccountPage()));
                       }
                     ),
                   ]
