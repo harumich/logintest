@@ -3,11 +3,11 @@ class Account {
   String name;
   String imagePath;
   String selfIntroduction;
-  String useId;
+  String userId;
   DateTime? createdTime;
   DateTime? updatedTime;
 
   Account({this.id = '', this.name = '', this.imagePath = '', this.selfIntroduction = '',
-    this.useId = '', this.createdTime, this.updatedTime,
+    this.userId = '', this.createdTime, this.updatedTime,
   });
 }
