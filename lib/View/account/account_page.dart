@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:logintest/View/account/edit_account_page.dart';
 import 'package:logintest/model/account.dart';
 import 'package:logintest/model/post.dart';
 import 'package:logintest/utils/authentication.dart';
@@ -65,8 +66,13 @@ class _AccountPageState extends State<AccountPage> {
                             ],
                           ),
                           OutlinedButton(
-                              onPressed: () {
-
+                              onPressed: () async {
+                                var result = await Navigator.push(context, MaterialPageRoute(builder: (context) => EditAccountPage()));
+                                if(result == true) {
+                                  setState(() {
+                                    myAccount = Authentication.myAccount!;
+                                  });
+                                }
                               }, child: Text('編集')
                           )
                         ],
