@@ -5,6 +5,8 @@ import 'package:logintest/View/account/edit_account_page.dart';
 import 'package:logintest/model/account.dart';
 import 'package:logintest/model/post.dart';
 import 'package:logintest/utils/authentication.dart';
+import 'package:logintest/utils/firestore/posts.dart';
+import 'package:logintest/utils/firestore/users.dart';
 
 class AccountPage extends StatefulWidget {
   const AccountPage({Key? key}) : super(key: key);
@@ -15,21 +17,6 @@ class AccountPage extends StatefulWidget {
 
 class _AccountPageState extends State<AccountPage> {
   Account myAccount = Authentication.myAccount!;
-
-  List<Post> postList = [
-    Post(
-        id: '1',
-        content: '初めまして',
-        postAccountId: '1',
-        createdTime: Timestamp.now()
-    ),
-    Post(
-        id: '2',
-        content: 'ご機嫌よう！',
-        postAccountId: '1',
-        createdTime: Timestamp.now()
-    ),
-  ];
 
   @override
   Widget build(BuildContext context) {
@@ -92,50 +79,72 @@ class _AccountPageState extends State<AccountPage> {
                   ),
                   child: Text('投稿', style: TextStyle(color: Colors.blue, fontWeight: FontWeight.bold),),
                 ),
-                Expanded(child: ListView.builder(
-                    physics: NeverScrollableScrollPhysics(),
-                    itemCount: postList.length,
-                    itemBuilder: (context, index) {
-                      return Container(  //widget内のUIを設計
-                        decoration: BoxDecoration(  //区切りを創る
-                            border: index == 0 ? Border(  //区切りを創る
-                              top: BorderSide(color: Colors.grey, width: 0),
-                              bottom: BorderSide(color: Colors.grey, width: 0),
-                            ) : Border(bottom: BorderSide(color: Colors.grey, width: 0),)
-                        ),
-                        padding: EdgeInsets.symmetric(horizontal: 10, vertical: 15),  //widget内にゆとりを持たせる
-                        child: Row(
-                          children: [
-                            CircleAvatar(  //CircleAvatar: 丸形のwidgetを表示させたいときに使う
-                              radius: 22,
-                              foregroundImage: NetworkImage(myAccount.imagePath),  //NetworkImage=インターネット上の画像
-                            ),
-                            Expanded(  //myAccount.name＆myAccount.userIdとDateFormatの間にスペースを創る
-                              child: Container(  //myAccount.name＆myAccount.userIdとDateFormatの間にスペースを創る
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,  //contentを真ん中から左に移動させる
-                                  children: [
-                                    Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,  //myAccount.name＆myAccount.userIdとDateFormatの間にスペースを創る
+                Expanded(child: StreamBuilder<QuerySnapshot>(
+                  stream: UserFirestore.users.doc(myAccount.id).collection('my_posts').orderBy('created_time', descending: true).snapshots(),
+                  builder: (context, snapshot) {
+                    if(snapshot.hasData) {
+                      List<String> myPostIds = List.generate(snapshot.data!.docs.length, (index) {
+                        return snapshot.data!.docs[index].id;
+                      });
+                      return FutureBuilder<List<Post>?>(
+                        future: PostFirestore.getPostsFromIds(myPostIds),
+                        builder: (context, snapshot) {
+                          if(snapshot.hasData) {
+                            return ListView.builder(
+                                physics: NeverScrollableScrollPhysics(),
+                                itemCount: snapshot.data!.length,
+                                itemBuilder: (context, index) {
+                                  Post post = snapshot.data![index];
+                                  return Container(  //widget内のUIを設計
+                                    decoration: BoxDecoration(  //区切りを創る
+                                        border: index == 0 ? Border(  //区切りを創る
+                                          top: BorderSide(color: Colors.grey, width: 0),
+                                          bottom: BorderSide(color: Colors.grey, width: 0),
+                                        ) : Border(bottom: BorderSide(color: Colors.grey, width: 0),)
+                                    ),
+                                    padding: EdgeInsets.symmetric(horizontal: 10, vertical: 15),  //widget内にゆとりを持たせる
+                                    child: Row(
                                       children: [
-                                        Row(  //myAccount.name＆myAccount.userIdとDateFormatの間にスペースを創る
-                                          children: [
-                                            Text(myAccount.name, style: TextStyle(fontWeight: FontWeight.bold),),
-                                            Text('@${myAccount.userId}', style: TextStyle(color: Colors.green)),
-                                          ],
+                                        CircleAvatar(  //CircleAvatar: 丸形のwidgetを表示させたいときに使う
+                                          radius: 22,
+                                          foregroundImage: NetworkImage(myAccount.imagePath),  //NetworkImage=インターネット上の画像
                                         ),
-                                        Text(DateFormat('M/d/yy').format(postList[index].createdTime!.toDate())),  // !='null'は絶対ないよ  //intlをインポートする  //String型に変更する
+                                        Expanded(  //myAccount.name＆myAccount.userIdとDateFormatの間にスペースを創る
+                                          child: Container(  //myAccount.name＆myAccount.userIdとDateFormatの間にスペースを創る
+                                            child: Column(
+                                              crossAxisAlignment: CrossAxisAlignment.start,  //contentを真ん中から左に移動させる
+                                              children: [
+                                                Row(
+                                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,  //myAccount.name＆myAccount.userIdとDateFormatの間にスペースを創る
+                                                  children: [
+                                                    Row(  //myAccount.name＆myAccount.userIdとDateFormatの間にスペースを創る
+                                                      children: [
+                                                        Text(myAccount.name, style: TextStyle(fontWeight: FontWeight.bold),),
+                                                        Text('@${myAccount.userId}', style: TextStyle(color: Colors.green)),
+                                                      ],
+                                                    ),
+                                                    Text(DateFormat('M/d/yy').format(post.createdTime!.toDate())),  // !='null'は絶対ないよ  //intlをインポートする  //String型に変更する
+                                                  ],
+                                                ),
+                                                Text(post.content),  //contentを表示
+                                              ],
+                                            ),
+                                          ),
+                                        )
                                       ],
                                     ),
-                                    Text(postList[index].content),  //contentを表示
-                                  ],
-                                ),
-                              ),
-                            )
-                          ],
-                        ),
+                                  );
+                                });
+                          } else {
+                            return Container();
+                          }
+                        }
                       );
-                    })
+                    } else {
+                      return Container();
+                    }
+                  }
+                )
                 )
               ],
             ),
