@@ -66,11 +66,18 @@ class _LoginPageState extends State<LoginPage> {
                 onPressed: () async {
                   var result = await Authentication.emailSignIn(email: emailController.text, pass: passController.text);
                   if(result is UserCredential) {
+                    if(result.user!.emailVerified == true) {
+                      await UserFirestore.getUser(result.user!.uid);
+                      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Screen()));
+                    } else {
+                      print('メール認証できていません');
+                    }
+                    }
                     var _result = await UserFirestore.getUser(result.user!.uid);
                     if(_result == true) {
+                      result.user!.sendEmailVerification();
                       Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Screen()));
                     }
-                  }
                 },
                 child: Text('emailでログイン')
               )
