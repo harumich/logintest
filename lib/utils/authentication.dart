@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:logintest/model/account.dart';
 
 class Authentication{
@@ -28,6 +29,26 @@ class Authentication{
       return _result;
     } on FirebaseAuthException catch (e) {
       print('authサインインエラー $e');
+      return false;
+    }
+  }
+
+  static Future<dynamic> signInWithGoogle() async{
+    try {
+      final googleUser = await GoogleSignIn(scopes: ['email']).signIn();
+      if(googleUser != null) {
+        final googleAuth = await googleUser.authentication;
+        final credential = GoogleAuthProvider.credential(
+          accessToken: googleAuth.accessToken,
+          idToken: googleAuth.idToken
+        );
+        final UserCredential _result = await _firebaseAuth.signInWithCredential(credential);
+        currentFirebaseUser = _result.user;
+        print('Googleログイン完了');
+        return _result;
+      }
+    } on FirebaseException catch(e) {
+      print('Googleログインエラー: $e');
       return false;
     }
   }

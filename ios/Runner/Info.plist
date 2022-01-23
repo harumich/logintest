@@ -49,5 +49,16 @@
 	<string>カメラへのアクセスが必要です。</string>
 	<key>NSMicrophoneUsageDescription</key>
     <string>マイクへのアクセスが必要です。</string>
+    <key>CFBundleURLTypes</key>
+    <array>
+    	<dict>
+    		<key>CFBundleTypeRole</key>
+    		<string>Editor</string>
+    		<key>CFBundleURLSchemes</key>
+    		<array>
+    			<string>com.googleusercontent.apps.861823949799-vc35cprkp249096uujjn0vvnmcvjppkn</string>  //iOSの設定の際に変更すること
+    		</array>
+    	</dict>
+    </array>
 </dict>
 </plist>
